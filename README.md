@@ -12,5 +12,3 @@ This project aggregates stock trading commission charged by all discount brokers
 
 ## Search Result in Unified Currency
 ![Search Result 2](comminimizer/demo/Search-4.PNG)
- 
-<meta name="google-site-verification" content="5Uud6ASuDuBYzTqqCHx2os7CLqBOOIsJsFdqvVpNUpc" />
