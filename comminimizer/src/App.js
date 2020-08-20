@@ -45,7 +45,7 @@ class CommissionPanel extends React.Component {
           this.props.comSearchResult.map((entry, i) => {
               if(entry["ComAmountOrigin"] > 0 && entry["ComAmountUnified"] > 0) { // in case of FX rate or reference data fetch error
                 return <div className="broker-option" key={i} role="button">
-                   <img src={`IMAGELINK/${entry["BrokerID"]}.svg`} alt="Not Fount"/>
+                   <img src={`IMAGELINK${entry["BrokerID"]}.svg`} alt="Not Fount"/>
                    <h3>{entry["BrokerName"]}</h3>
                    <h5>{entry["AccountType"]}</h5>
                    <p>{this.convertCurrencyCode(entry["ComCurrencyOrigin"], entry["ComCurrencyUnified"])} {this.convertCurrencyAmount(entry["ComAmountOrigin"], entry["ComAmountUnified"]).toFixed(2)}</p>
@@ -281,6 +281,28 @@ This website is currently under development and the team would like to expand th
   }
 }
 
+class ErrorBoundary extends React.Component {
+  state = {
+    hasError: false
+  }
+  
+  static getDerivedStateFromError(error) {
+	return { hasError: true };
+  }
+  
+  //TODO add service to collect error info
+  componentDidCatch(error, errorInfo) {
+    console.log(errorInfo);
+  }
+  
+  render() {
+    if(this.state.hasError) {
+      return <h1>Unable to Load. Please try refreshing the page later.</h1>
+    }
+    return this.props.children;
+  }
+}
+
 class MainContent extends React.Component {
   state = {
     page: 1
@@ -293,7 +315,7 @@ class MainContent extends React.Component {
   }
   
   render() {
-    var content = (<div className="App-header">
+    let content = (<div className="App-header">
                      <div className="menu">
                        <nav>
                          <ul>
@@ -303,26 +325,24 @@ class MainContent extends React.Component {
                        </nav>
                      </div>
                    </div>);
+    let main;
     switch(this.state.page){
       case 1:
-      return (
-          <>
-            {content}
-            <Search></Search>
-          </>);
+        main = <Search></Search>;
+        break;
       case 2:
-        return (
-          <>
-            {content}
-            <About></About>
-          </>);
+        main = <About></About>;
+        break;
       default:
-      return (
-          <>
-            {content}
-            <Search></Search>
-          </>);
+        main = <Search></Search>;
     }
+    return (
+      <>
+        {content}
+        <ErrorBoundary>
+          {main}
+        </ErrorBoundary>
+      </>);
   }
 }
 
