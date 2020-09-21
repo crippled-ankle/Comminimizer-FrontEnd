@@ -20,7 +20,6 @@ class Search extends React.Component {
     chosenInstr: "",
     chosenInstrType: 1, //only supports stock for now
     chosenMarket: "",
-    chosenCurrency: "",
     quantity: 0,
     quantityType: "shares",
     comSearchResult: ""
@@ -54,9 +53,8 @@ class Search extends React.Component {
   handleClickInstr(e, instr) {
     this.setState({
       currentStep: 2,
-      chosenCurrency: instr["8. currency"],
-      chosenInstr: instr["1. symbol"],
-      chosenMarket: instr["4. region"]
+      chosenInstr: instr["symbol"],
+      chosenMarket: instr["exchange"]
     });
   }
   
@@ -104,7 +102,6 @@ class Search extends React.Component {
     var criteria = `{"Instr": ` + this.state.chosenInstr +
                    `, "InstrType": ` + this.state.chosenInstrType +
                    `, "Market": "` + this.state.chosenMarket +
-                   `", "Currency": "` + this.state.chosenCurrency +
                    `", "Quantity": ` + this.state.quantity +
                    `, "QuantityType": ` + this.state.quantityType +
                    `, "AccountType": ` + this.state.chosenAccountType + `}`;
@@ -157,9 +154,9 @@ class Search extends React.Component {
                       <input type="text" placeholder="Start by typing in the instrument name" onChange={this.onChange}></input>
                     </div>
                     <div className="search-result" key="search-result">
-                      { this.state.instrs.hasOwnProperty("bestMatches") &&
-                        this.state.instrs.bestMatches.map((instr, i) => {
-                          return <a key={i} href="#" onClick={(e) => this.handleClickInstr(e, instr)}>{instr["1. symbol"]} {instr["2. name"]}</a>
+                      { this.state.instrs.hasOwnProperty("quotes") &&
+                        this.state.instrs.quotes.map((instr, i) => {
+                          return <a key={i} href="#" onClick={(e) => this.handleClickInstr(e, instr)}>{instr["symbol"]} {instr["longname"]}</a>
                       })}
                     </div>
                   </div>
