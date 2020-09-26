@@ -25,7 +25,7 @@ Information is reviewed and updated periodically, and the final commission charg
 
     The foreign currency conversion is done by leveraging the daily rate published by Bank of Canada. Brokers may use different rates, so it is not guarenteed that this rate can be achieved.`}</p>
         <h2>Contact Us</h2>
-        <p>{`If you have discovered any mistakes in the information or have any feedback or comments, please direct your message to 
+        <p>{`If you have discovered any mistakes in the information or have any feedback or comments, please direct your message to `}<a href="mailto:support@comminimizer.com">support@comminimizer.com</a>{`
 
 This website is currently under development and the team would like to expand the scope beyond the equity world, so stay tuned.
 `}</p>

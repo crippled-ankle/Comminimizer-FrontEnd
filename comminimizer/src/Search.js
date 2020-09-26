@@ -22,7 +22,8 @@ class Search extends React.Component {
     chosenMarket: "",
     quantity: 0,
     quantityType: "shares",
-    comSearchResult: ""
+    comSearchResult: "",
+	showLoading: true
   };
   
   onChange = e => {
@@ -35,7 +36,7 @@ class Search extends React.Component {
   };
   
   search = query => {
-    const url = `INSTRUMENT_SEARCH_LINK`  + query;
+    const url = `http://localhost:8080/search-instrument/`  + query;
   
     fetch(url)
     .then(results => results.json())
@@ -46,7 +47,10 @@ class Search extends React.Component {
   
   stepGoBack() {
     this.setState({
-      currentStep: this.state.currentStep - 1
+      currentStep: this.state.currentStep - 1,
+      chosenAccountType: 3,
+      quantity: 0,
+      showLoading: true
     });
   }
   
@@ -55,13 +59,6 @@ class Search extends React.Component {
       currentStep: 2,
       chosenInstr: instr["symbol"],
       chosenMarket: instr["exchange"]
-    });
-  }
-  
-  handleClickQuantity(quantityType, id) {
-    document.getElementById(id).checked = true;
-    this.setState({
-      quantityType: quantityType
     });
   }
   
@@ -89,23 +86,13 @@ class Search extends React.Component {
   handleClickCalculate() {
     //var dummyResult = JSON.parse("[{\"BrokerID\": \"1\",\"BrokerName\": \"Questrade Inc.\",\"AccountType\": \"Regular Account\",\"ComCurrency\": \"CAD\", \"ComAmount\": \"99.9\"}, \
     //                               {\"BrokerID\": \"2\",\"BrokerName\": \"InteractiveBrokers Inc.\",\"AccountType\": \"TFSA Account\",\"ComCurrency\": \"CAD\", \"ComAmount\": \"999.9\"}]");
-    
-    //Need info:
-    //Instr
-    //Instr Type
-    //Market
-    //Price
-    //Quantity
-    //Quantity Type
-    //Account Type
-    //Currency(Product currency can be different than market currency)
     var criteria = `{"Instr": ` + this.state.chosenInstr +
                    `, "InstrType": ` + this.state.chosenInstrType +
                    `, "Market": "` + this.state.chosenMarket +
                    `", "Quantity": ` + this.state.quantity +
                    `, "QuantityType": ` + this.state.quantityType +
                    `, "AccountType": ` + this.state.chosenAccountType + `}`;
-    fetch("COMMISSION_SEARCH_LINK", {
+    fetch("http://localhost:8080/search/", {
       method: 'POST',
       body: JSON.stringify(criteria),
       headers:{
@@ -113,7 +100,10 @@ class Search extends React.Component {
       }
     }).then(res => res.json())
       .then(response => {
-        this.setState({comSearchResult: response});
+        this.setState({
+          comSearchResult: response,
+          showLoading: false
+        });
       }).catch(error => console.error('Error:', error));
   
     this.setState({
@@ -138,8 +128,8 @@ class Search extends React.Component {
     return (
       <ReactCSSTransitionGroup 
           transitionName="step"
-          transitionEnterTimeout={100} 
-          transitionLeaveTimeout={100}>
+          transitionEnterTimeout={200} 
+          transitionLeaveTimeout={200}>
         {this.renderPage()}
       </ReactCSSTransitionGroup>
     )
@@ -148,33 +138,32 @@ class Search extends React.Component {
   renderPage() {
     switch(this.state.currentStep){
       case 1:
-        return (<Profiler id="Search-Profiler" onRender={this.showProfilingStat}>
-                  <div className="search" key="search">
+        return (<Profiler id="Search-Profiler" key="search" onRender={this.showProfilingStat}>
+                  <div className="search">
                     <div className="search-bar" key="search-bar">
-                      <input type="text" placeholder="Start by typing in the instrument name" onChange={this.onChange}></input>
+                      <input type="text" placeholder="Start by typing in the instrument name (e.g. MSFT, Microsoft, 600519)" onChange={this.onChange}></input>
                     </div>
                     <div className="search-result" key="search-result">
                       { this.state.instrs.hasOwnProperty("quotes") &&
                         this.state.instrs.quotes.map((instr, i) => {
-                          return <a key={i} href="#" onClick={(e) => this.handleClickInstr(e, instr)}>{instr["symbol"]} {instr["longname"]}</a>
+                          if(instr["quoteType"] === "EQUITY")
+							return <a key={i} href="#" onClick={(e) => this.handleClickInstr(e, instr)}>{instr["symbol"]} {instr["longname"]}</a>
+                          else
+                            return <></>
                       })}
                     </div>
                   </div>
                 </Profiler>)
       case 2:
-        return (<Profiler id="Question-Profiler" onRender={this.showProfilingStat}>
-                  <div className="question-wrapper" key="question-wrapper">
+        return (<Profiler id="Question-Profiler" key="question-wrapper" onRender={this.showProfilingStat}>
+                  <div className="question-wrapper">
                     <GoBackButton handler={this.stepGoBack}></GoBackButton>
-                    <div className="quantity-question" key="quantity-question">
+                    <div className="quantity-question">
                       <p>Quantity?</p>
-                      <input id="quantity-unit-shares" name="quantity" type="Radio" defaultChecked/>
-                      <label onClick={(e) => this.handleClickQuantity("shares", "quantity-unit-shares")}>By Number of Units</label>
-                      <input id="quantity-unit-dollar" name="quantity" type="Radio"/>
-                      <label onClick={(e) => this.handleClickQuantity("dollar", "quantity-unit-dollar")}>By Dollar Amount</label><br />
                       <input className="quantity-input" type="number" min="1" max="1000000" id="quantity" onChange={(e) => this.handleQuantityChange(e)} required/>
                       <label id="unit"> {this.state.quantityType}</label><br />
                     </div>
-                    <div className="account-question" key="account-question">
+                    <div className="account-question">
                       <p>Account Type?</p>
                       <input id="account-type-regular" name="account-type" type="Radio" />
                       <label onClick={(e) => this.handleClickAcctType("regular", "account-type-regular")}>Regular Account Only</label>
@@ -187,13 +176,14 @@ class Search extends React.Component {
                   </div>
                 </Profiler>)
       case 3:
-        return (<Profiler id="Result-Profiler" onRender={this.showProfilingStat}>
-                  <div className="commission-panel-wrapper" key="commission-panel-wrapper">
+        return (<Profiler id="Result-Profiler" key="commission-panel-wrapper" onRender={this.showProfilingStat}>
+                  <div className="commission-panel-wrapper">
                     <GoBackButton handler={this.stepGoBack}></GoBackButton>
                     <CommissionPanel comSearchResult={this.state.comSearchResult}
                                      quantity={this.state.quantity}
                                      quantityType={this.state.quantityType}
-                                     instr={this.state.chosenInstr}>
+                                     instr={this.state.chosenInstr}
+                                     showLoading={this.state.showLoading}>
                     </CommissionPanel>
                   </div>
                 </Profiler>)

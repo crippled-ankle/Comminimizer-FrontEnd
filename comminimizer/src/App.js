@@ -1,6 +1,7 @@
 import React from 'react';
 import Search from './Search.js';
 import About from './About.js';
+import Disclaimer from './Disclaimer.js';
 import ErrorBoundary from './ErrorBoundary.js';
 import './App.css';
 
@@ -16,7 +17,7 @@ class MainContent extends React.Component {
   }
   
   render() {
-    let content = (<div className="App-header">
+    let header = (<div className="App-header">
                      <div className="menu">
                        <nav>
                          <ul>
@@ -26,6 +27,7 @@ class MainContent extends React.Component {
                        </nav>
                      </div>
                    </div>);
+    let disclaimer = (<Disclaimer />);
     let main;
     switch(this.state.page){
       case 1:
@@ -39,10 +41,11 @@ class MainContent extends React.Component {
     }
     return (
       <>
-        {content}
+        {header}
         <ErrorBoundary>
           {main}
         </ErrorBoundary>
+        {disclaimer}
       </>);
   }
 }
