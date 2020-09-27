@@ -36,7 +36,7 @@ class Search extends React.Component {
   };
   
   search = query => {
-    const url = `http://localhost:8080/search-instrument/`  + query;
+    const url = `http://comminimizer.com:8080/search-instrument/`  + query;
   
     fetch(url)
     .then(results => results.json())
@@ -92,7 +92,7 @@ class Search extends React.Component {
                    `", "Quantity": ` + this.state.quantity +
                    `, "QuantityType": ` + this.state.quantityType +
                    `, "AccountType": ` + this.state.chosenAccountType + `}`;
-    fetch("http://localhost:8080/search/", {
+    fetch("http://comminimizer.com:8080/search/", {
       method: 'POST',
       body: JSON.stringify(criteria),
       headers:{
