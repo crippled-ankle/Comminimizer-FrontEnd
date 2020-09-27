@@ -36,7 +36,7 @@ class Search extends React.Component {
   };
   
   search = query => {
-    const url = `http://comminimizer.com:8080/search-instrument/`  + query;
+    const url = `/search-instrument/` + query;
   
     fetch(url)
     .then(results => results.json())
@@ -92,7 +92,7 @@ class Search extends React.Component {
                    `", "Quantity": ` + this.state.quantity +
                    `, "QuantityType": ` + this.state.quantityType +
                    `, "AccountType": ` + this.state.chosenAccountType + `}`;
-    fetch("http://comminimizer.com:8080/search/", {
+    fetch("/search/", {
       method: 'POST',
       body: JSON.stringify(criteria),
       headers:{
@@ -149,7 +149,7 @@ class Search extends React.Component {
                           if(instr["quoteType"] === "EQUITY")
 							return <a key={i} href="#" onClick={(e) => this.handleClickInstr(e, instr)}>{instr["symbol"]} {instr["longname"]}</a>
                           else
-                            return <></>
+                            return <React.Fragment key={i}></React.Fragment>
                       })}
                     </div>
                   </div>

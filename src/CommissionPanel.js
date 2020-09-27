@@ -30,7 +30,6 @@ class CommissionPanel extends React.Component {
   }
   
   render() {
-    console.log(this.props.showLoading);
     return (
       <div className="broker-options">
         <div className="broker-options-header">
