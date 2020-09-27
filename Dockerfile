@@ -5,5 +5,5 @@ COPY . ./
 RUN npm ci
 RUN npm run build
 RUN npm install -g serve
-CMD serve -s build
+CMD serve -p 80 -s build
 EXPOSE 80
