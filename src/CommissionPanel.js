@@ -64,7 +64,7 @@ class CommissionPanel extends React.Component {
                  <p>{this.convertCurrencyCode(entry["ComCurrencyOrigin"], entry["ComCurrencyUnified"])} {this.convertCurrencyAmount(entry["ComAmountOrigin"], entry["ComAmountUnified"]).toFixed(2)}</p>
                </div>
 			  } else {
-                return <></>
+                return <React.Fragment key={i}></React.Fragment>
             }
         })}
       </div>
