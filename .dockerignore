@@ -1,7 +1,6 @@
 demo
 node_modules
 profiling
-src
 .dockerignore
 Dockerfile
 README.md
