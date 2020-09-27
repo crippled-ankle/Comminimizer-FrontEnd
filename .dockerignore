@@ -1,4 +1,7 @@
+demo
 node_modules
-build
+profiling
+src
 .dockerignore
 Dockerfile
+README.md
