@@ -2,6 +2,14 @@ import React from 'react';
 import './App.css';
 import loading from './loading.jpg';
 
+function importAll(r) {
+    let images = {};
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    return images;
+}
+
+const images = importAll(require.context('../img', false, /\.svg/));
+
 class CommissionPanel extends React.Component {
   state = {
     showCAD: false
@@ -50,7 +58,7 @@ class CommissionPanel extends React.Component {
           this.props.comSearchResult.map((entry, i) => {
             if(entry["ComAmountOrigin"] > 0 && entry["ComAmountUnified"] > 0) { // in case of FX rate or reference data fetch error
               return <div className="broker-option" key={i} role="button">
-                 <img src={`/img/${entry["BrokerID"]}.svg`} alt=""/>
+                 <img src={images[`${entry["BrokerID"]}.svg`]} alt=""/>
                  <h3>{entry["BrokerName"]}</h3>
                  <h5>{entry["AccountType"]}</h5>
                  <p>{this.convertCurrencyCode(entry["ComCurrencyOrigin"], entry["ComCurrencyUnified"])} {this.convertCurrencyAmount(entry["ComAmountOrigin"], entry["ComAmountUnified"]).toFixed(2)}</p>
