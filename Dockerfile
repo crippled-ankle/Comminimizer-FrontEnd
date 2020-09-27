@@ -1,9 +1,9 @@
 FROM node:13.12.0-alpine
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --silent
-RUN npm run build
+RUN npm ci
 COPY . ./
-CMD ["npm", "start"]
+RUN npm run build
+RUN npm install -g serve
+CMD serve -s build
+EXPOSE 80
