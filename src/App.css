@@ -13,6 +13,12 @@
   color: white;
 }
 
+.App-header h1 {
+  height: 0;
+  width: 0;
+  font-size: 0;
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -199,16 +205,26 @@ input::-webkit-inner-spin-button {
   outline: none;
 }
 
+.quantity-input:valid ~ .invalid-quantity-notice {
+  font-size: 1vh;
+  visibility: hidden;
+}
+
 .quantity-input:invalid {
   border-radius: 10px;
   border-color: red;
+}
+
+.quantity-input:invalid ~ .invalid-quantity-notice {
+  color: red;
+  font-size: 1vh;
 }
 
 .account-question p {
   font-size: 5vh;
 }
 
-.account-question button {
+.question-wrapper button {
   margin-top: 3vh;
   background-color: white;
   color: black;
@@ -217,9 +233,18 @@ input::-webkit-inner-spin-button {
   padding: 1% 3%;
 }
 
-.account-question button:hover {
+.question-wrapper button:hover {
   background-color: #000000;
   color: white;
+}
+
+.question-wrapper button:disabled {
+  margin-top: 3vh;
+  background-color: white;
+  color: gray;
+  border: 2px solid gray;
+  font-size: 1vw;
+  padding: 1% 3%;
 }
 
 .broker-options {

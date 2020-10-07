@@ -1,5 +1,5 @@
 import React from 'react';
-import Search from './Search.js';
+import SingleTrade from './SingleTrade.js';
 import About from './About.js';
 import Disclaimer from './Disclaimer.js';
 import ErrorBoundary from './ErrorBoundary.js';
@@ -18,26 +18,27 @@ class MainContent extends React.Component {
   
   render() {
     let header = (<div className="App-header">
+                     <h1>Check the lowest brokerage commission charge for trading stocks in more than 40 markets worldwide with CIPF members.</h1>
                      <div className="menu">
-                       <nav>
-                         <ul>
-                           <li><a onClick={(e) => this.handleMenuClick(1)}>Search</a></li>
-                           <li><a onClick={(e) => this.handleMenuClick(2)}>About</a></li>
-                         </ul>
-                       </nav>
-                     </div>
-                   </div>);
+                      <nav>
+                        <ul>
+                          <li><a onClick={(e) => this.handleMenuClick(1)}>Search</a></li>
+                          <li><a onClick={(e) => this.handleMenuClick(2)}>About</a></li>
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>);
     let disclaimer = (<Disclaimer />);
     let main;
     switch(this.state.page){
       case 1:
-        main = <Search></Search>;
+        main = <SingleTrade></SingleTrade>;
         break;
       case 2:
         main = <About></About>;
         break;
       default:
-        main = <Search></Search>;
+        main = <SingleTrade></SingleTrade>;
     }
     return (
       <>
