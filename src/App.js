@@ -18,7 +18,6 @@ class MainContent extends React.Component {
   
   render() {
     let header = (<div className="App-header">
-                     <h1>Check the lowest brokerage commission charge for trading stocks in more than 40 markets worldwide with CIPF members.</h1>
                      <div className="menu">
                       <nav>
                         <ul>
