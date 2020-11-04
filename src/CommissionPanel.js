@@ -4,7 +4,7 @@ import loading from './loading.jpg';
 
 function importAll(r) {
     let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); return null; });
     return images;
 }
 
@@ -47,7 +47,7 @@ class CommissionPanel extends React.Component {
             <input className="currency-switch-checkbox" id="currency-switch-checkbox" type="checkbox" checked={this.state.showCAD} onChange={(e) => this.handleShowCADChange()}/>
             <label className="currency-switch-label" htmlFor="currency-switch-checkbox" style={{background: this.state.showCAD && '#06D6A0'}}>
             <span className="currency-switch-button"/>
-            </label></>}
+            </label><br/></>}
         </div>
         { this.props.showLoading &&
           <div name="loading-mask-wrapper">
